@@ -43,7 +43,7 @@ vel = 5
 walk_count = 0
 
 fps_clock = pygame.time.Clock()
-fps = 20
+fps = 60
 
 throw = False
 throw_count = 10
@@ -53,20 +53,20 @@ def draw():
     global walk_count
 
     game_display.fill(black)
-    if walk_count + 1 >= 12:
+    if walk_count + 1 >= 24:
         walk_count = 0
 
     if left:
-        game_display.blit(walk_left[walk_count//3], (ball_x, ball_y))
+        game_display.blit(walk_left[walk_count//6], (ball_x, ball_y))
         walk_count += 1
     elif right:
-        game_display.blit(walk_right[walk_count // 3], (ball_x, ball_y))
+        game_display.blit(walk_right[walk_count // 6], (ball_x, ball_y))
         walk_count += 1
     elif up:
-        game_display.blit(walk_up[walk_count // 3], (ball_x, ball_y))
+        game_display.blit(walk_up[walk_count // 6], (ball_x, ball_y))
         walk_count += 1
     elif down:
-        game_display.blit(walk_down[walk_count // 3], (ball_x, ball_y))
+        game_display.blit(walk_down[walk_count // 6], (ball_x, ball_y))
         walk_count += 1
     else:
         game_display.blit(sitting[0], (ball_x, ball_y))
