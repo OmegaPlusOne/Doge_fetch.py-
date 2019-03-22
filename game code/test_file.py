@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 
@@ -28,18 +29,28 @@ walk_up = [pygame.image.load("images/walking_up01.png"), pygame.image.load("imag
 walk_down = [pygame.image.load("images/walking_forward01.png"), pygame.image.load("images/walking_forward02.png"),
              pygame.image.load("images/walking_forward03.png"), pygame.image.load("images/walking_forward04.png")]
 sitting = [pygame.image.load("images/sit04.png")]
+heart_img = [pygame.image.load("images/h2.png")]
+
+font = pygame.font.SysFont('8bitoperatorregular', 10)
 
 fps_clock = pygame.time.Clock()
 fps = 60
 
-throw = False
-throw_count = 10
+
+def text_objects(text, color):
+    text_surface = font.render(text, True, color)
+    return text_surface, text_surface.get_rect()
+
+
+def message_screen(msg, color):
+    text_surface, text_rect = text_objects(msg, color)
+    text_rect.center = (width/2), (height/2)
+    game_display.blit(text_surface, text_rect)
 
 
 def draw(ball_x, ball_y):
     global walk_count
 
-    game_display.fill(black)
     if walk_count + 1 >= 24:
         walk_count = 0
 
@@ -58,25 +69,33 @@ def draw(ball_x, ball_y):
     else:
         game_display.blit(sitting[0], (ball_x, ball_y))
 
-    pygame.display.update()
 
 def game_loop():
     ball_x = 100
     ball_y = 100
-    ball_size = 75
+    ball_size = 70
+    apple_size = 25
+    lv = 0
 
     global left
     global right
     global up
     global down
     global standing
+    global throw
+    global throw_count
 
+    throw = False
+    throw_count = 10
     left = False
     right = False
     up = False
     down = False
     standing = False
     vel = 5
+
+    apple_x = round(random.randrange(0, width - apple_size))
+    apple_y = round(random.randrange(0, height - apple_size))
 
     global walk_count
     walk_count = 0
@@ -128,26 +147,37 @@ def game_loop():
                 down = False
                 walk_count = 0
 
-            # if keys[pygame.K_SPACE]:
-            #     throw = True
-            #     left = False
-            #     right = False
-            #     up = False
-            #     down = False
-            #     walk_count = 0
+            if keys[pygame.K_SPACE]:
+                throw = True
+                left = False
+                right = False
+                up = False
+                down = False
+                walk_count = 0
 
-        # else:
-        #     if throw_count >= -10:
-        #         neg = 1
-        #         if throw_count < 0:
-        #             neg = -1
-        #         ball_y -= (throw_count ** 2) * .3 * neg
-        #         throw_count -= 1
-        #     else:
-        #         throw = False
-        #         throw_count = 10
+        else:
+            if throw_count >= -10:
+                neg = 1
+                if throw_count < 0:
+                    neg = -1
+                ball_y -= (throw_count ** 2) * .3 * neg
+                throw_count -= 1
+            else:
+                throw = False
+                throw_count = 10
 
+        game_display.fill(black)
+        message_screen(("times loved: " + str(lv)), white)
+        game_display.blit(heart_img[0], (apple_x, apple_y))
         draw(ball_x, ball_y)
+        pygame.display.update()
+
+        if ball_x > apple_x and ball_x < apple_x + apple_size or ball_x + ball_size > apple_x and ball_x + ball_size < apple_x + apple_size:
+            if ball_y > apple_y and ball_y < apple_y + apple_size or ball_y + ball_size > apple_y and ball_y + ball_size < apple_y + apple_size:
+                apple_x = round(random.randrange(0, width - apple_size) / 10.0) * 10
+                apple_y = round(random.randrange(0, height - apple_size) / 10.0) * 10
+                lv += 1
+
         fps_clock.tick(fps)
 
 
