@@ -1,5 +1,4 @@
 import pygame
-import images
 
 pygame.init()
 
@@ -30,18 +29,6 @@ walk_down = [pygame.image.load("images/walking_forward01.png"), pygame.image.loa
              pygame.image.load("images/walking_forward03.png"), pygame.image.load("images/walking_forward04.png")]
 sitting = [pygame.image.load("images/sit04.png")]
 
-ball_x = 100
-ball_y = 100
-ball_size = 10
-
-left = False
-right = False
-up = False
-down = False
-standing = False
-vel = 5
-walk_count = 0
-
 fps_clock = pygame.time.Clock()
 fps = 60
 
@@ -49,7 +36,7 @@ throw = False
 throw_count = 10
 
 
-def draw():
+def draw(ball_x, ball_y):
     global walk_count
 
     game_display.fill(black)
@@ -73,75 +60,97 @@ def draw():
 
     pygame.display.update()
 
+def game_loop():
+    ball_x = 100
+    ball_y = 100
+    ball_size = 75
 
-run = True
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+    global left
+    global right
+    global up
+    global down
+    global standing
 
-    keys = pygame.key.get_pressed()
+    left = False
+    right = False
+    up = False
+    down = False
+    standing = False
+    vel = 5
 
-    if not throw:
-        if keys[pygame.K_ESCAPE]:
-            run = False
+    global walk_count
+    walk_count = 0
 
-        if keys[pygame.K_LEFT] and ball_x > vel:
-            ball_x -= vel
-            left = True
-            right = False
-            up = False
-            down = False
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
 
-        elif keys[pygame.K_RIGHT] and ball_x < width - ball_size - vel:
-            ball_x += vel
-            left = False
-            right = True
-            up = False
-            down = False
+        keys = pygame.key.get_pressed()
 
-        elif keys[pygame.K_UP] and ball_y > vel:
-            ball_y -= vel
-            left = False
-            right = False
-            up = True
-            down = False
+        if not throw:
+            if keys[pygame.K_ESCAPE]:
+                run = False
 
-        elif keys[pygame.K_DOWN] and ball_y < height - ball_size - vel:
-            ball_y += vel
-            left = False
-            right = False
-            up = False
-            down = True
+            if keys[pygame.K_LEFT] and ball_x > vel:
+                ball_x -= vel
+                left = True
+                right = False
+                up = False
+                down = False
 
-        else:
-            left = False
-            right = False
-            up = False
-            down = False
-            walk_count = 0
+            elif keys[pygame.K_RIGHT] and ball_x < width - ball_size - vel:
+                ball_x += vel
+                left = False
+                right = True
+                up = False
+                down = False
 
-        if keys[pygame.K_SPACE]:
-            throw = True
-            left = False
-            right = False
-            up = False
-            down = False
-            walk_count = 0
+            elif keys[pygame.K_UP] and ball_y > vel:
+                ball_y -= vel
+                left = False
+                right = False
+                up = True
+                down = False
 
-    else:
-        if throw_count >= -10:
-            neg = 1
-            if throw_count < 0:
-                neg = -1
-            ball_y -= (throw_count ** 2) * .3 * neg
-            throw_count -= 1
-        else:
-            throw = False
-            throw_count = 10
+            elif keys[pygame.K_DOWN] and ball_y < height - ball_size - vel:
+                ball_y += vel
+                left = False
+                right = False
+                up = False
+                down = True
 
-    draw()
-    fps_clock.tick(fps)
+            else:
+                left = False
+                right = False
+                up = False
+                down = False
+                walk_count = 0
 
+            # if keys[pygame.K_SPACE]:
+            #     throw = True
+            #     left = False
+            #     right = False
+            #     up = False
+            #     down = False
+            #     walk_count = 0
+
+        # else:
+        #     if throw_count >= -10:
+        #         neg = 1
+        #         if throw_count < 0:
+        #             neg = -1
+        #         ball_y -= (throw_count ** 2) * .3 * neg
+        #         throw_count -= 1
+        #     else:
+        #         throw = False
+        #         throw_count = 10
+
+        draw(ball_x, ball_y)
+        fps_clock.tick(fps)
+
+
+game_loop()
 pygame.quit()
 quit()
