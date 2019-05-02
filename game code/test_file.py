@@ -31,7 +31,7 @@ walk_down = [pygame.image.load("images/walking_forward01.png"), pygame.image.loa
 sitting = [pygame.image.load("images/sit04.png")]
 heart_img = [pygame.image.load("images/h2.png")]
 
-font = pygame.font.SysFont('8bitoperatorregular', 10)
+font = pygame.font.SysFont('8bitoperatorregular', 20)
 
 fps_clock = pygame.time.Clock()
 fps = 60
